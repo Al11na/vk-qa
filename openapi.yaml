@@ -1,0 +1,86 @@
+openapi: 3.0.3
+info:
+  title: JSONPlaceholder Posts API Contract
+  version: 1.0.0
+  description: >-
+    Контракт публичного JSONPlaceholder API. POST /posts имитирует создание
+    ресурса, но не сохраняет его и не выполняет серверную валидацию содержимого.
+paths:
+  /posts:
+    get:
+      summary: Получить список всех постов
+      responses:
+        '200':
+          description: Успешный ответ
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+    post:
+      summary: Создать новый пост
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewPost'
+      responses:
+        '201':
+          description: Пост успешно создан
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+  /posts/{id}:
+    get:
+      summary: Получить пост по ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Пост найден
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+        '404':
+          description: Пост не найден
+components:
+  schemas:
+    NewPost:
+      type: object
+      additionalProperties: false
+      required:
+        - title
+        - body
+        - userId
+      properties:
+        title:
+          type: string
+        body:
+          type: string
+        userId:
+          type: integer
+    Post:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - title
+        - body
+        - userId
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        body:
+          type: string
+        userId:
+          type: integer
